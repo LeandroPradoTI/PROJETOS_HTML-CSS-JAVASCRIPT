@@ -5,13 +5,14 @@ const addNoteBtn = document.querySelector(".add-note")
 
 // Funções
 function showNotes() {
-    getNotes().forEach((bote) => {
-        
+    getNotes().forEach((note) => {
+        const noteElement = createNote(note.id, note.content, note.fixed)
+        notesContainer.appendChild(noteElement)
     })
 }
 
 function addNote() {
-const notes = []
+    const notes = getNotes()
 
     const noteObject = {
         id: generateId(),
@@ -38,7 +39,7 @@ function createNote(id, content, fixed) {
     element.classList.add("note")
     const textarea = document.createElement("textarea")
     textarea.value = content
-    textarea.placeholder = "Adiciione algum text..."
+    textarea.placeholder = "Adiciione algum texto..."
     element.appendChild(textarea)
     return element
 }
@@ -55,3 +56,6 @@ function saveNotes(notes) {
 
 // Eventos
 addNoteBtn.addEventListener("click", () => addNote())
+
+//Inicialização
+showNotes()
