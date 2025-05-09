@@ -5,10 +5,15 @@ const addNoteBtn = document.querySelector(".add-note")
 
 // Funções
 function showNotes() {
+    clearNotes()
     getNotes().forEach((note) => {
         const noteElement = createNote(note.id, note.content, note.fixed)
         notesContainer.appendChild(noteElement)
     })
+}
+
+function clearNotes() {
+    notesContainer.replaceChildren([])
 }
 
 function addNote() {
@@ -41,13 +46,51 @@ function createNote(id, content, fixed) {
     textarea.value = content
     textarea.placeholder = "Adiciione algum texto..."
     element.appendChild(textarea)
+
+    const pinIcon = document.createElement("i")
+    pinIcon.classList.add(...["bi", "bi-pin"])
+    element.appendChild(pinIcon)
+
+    const deleteIcon = document.createElement("i")
+    deleteIcon.classList.add(...["bi", "bi-x-lg"])
+    element.appendChild(deleteIcon)
+
+    const duplicateIcon = document.createElement("i")
+    duplicateIcon.classList.add(...["bi", "bi-file-earmark-plus"])
+    element.appendChild(duplicateIcon)
+
+    if (fixed) {
+        element.classList.add("fixed")
+    }
+    // Eventos do elemento
+    element.querySelector(".bi-pin").addEventListener("click", () => {
+        toggleFixNote(id)
+    })
+
+    element.querySelector(".bi-x-lg").addEventListener("click", () => {
+        deleteNote(id, element)
+    })
+
     return element
+}
+
+function toggleFixNote(id) {
+    const notes = getNotes()
+    const targetNote = notes.filter((note) => note.id === id)[0]
+    targetNote.fixed = !targetNote.fixed
+    saveNotes(notes)
+    showNotes()
+}
+
+function deleteNote (id, element) {
+    
 }
 
 // Local Storage
 function getNotes() {
     const notes = JSON.parse(localStorage.getItem("notes") || "[]")
-    return notes
+    const orderedNotes = notes.sort((a, b) => (a.fixed > b.fixed ? -1 : 1))
+    return orderedNotes
 }
 
 function saveNotes(notes) {
