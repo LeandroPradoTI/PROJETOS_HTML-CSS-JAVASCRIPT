@@ -83,7 +83,7 @@ function toggleFixNote(id) {
 }
 
 function deleteNote (id, element) {
-    
+    //parei aqui na aula
 }
 
 // Local Storage
